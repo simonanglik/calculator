@@ -11,3 +11,51 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.calc-panel {
+  flex-direction: row;
+}
+
+.calc-panel-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.calc-button {
+  flex-grow: 1;
+  background-color: yellow;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.calc-display {
+  flex-grow: 1;
+  height: 40px;
+  border: solid 4px green;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.calc-history {
+  flex-grow: 1;
+  height: 200px;
+  border: solid 4px green;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: right;
+  overflow-y:auto;
+}
+
+.calc-message {
+  display: inline-flex;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: auto;
+}
