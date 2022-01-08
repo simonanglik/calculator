@@ -30,13 +30,21 @@ code {
   font-weight: bold;
 }
 
-.calc-display {
+.calc-display-container {
+  display: flex;
+  flex-direction: row;
   flex-grow: 1;
   height: 40px;
   border: solid 4px green;
+}
+
+.calc-display {
+  flex-grow: 1;
   font-size: 24px;
   font-weight: bold;
   text-align: right;
+  margin: 0px;
+  width: 100px;
 }
 
 .calc-history {
@@ -47,10 +55,21 @@ code {
   font-weight: bold;
   text-align: right;
   overflow-y:scroll;
+  background-color: lightgrey;
 }
 
 .calc-message {
   display: inline-flex;
+  flex-direction: row;
+}
+
+.message-line {
+  flex-grow: 1;
+  background-color: lightgrey;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0px;
+  height: 20px;
 }
 
 .calculator {
@@ -58,4 +77,42 @@ code {
   flex-direction: column;
   width: 30%;
   margin: auto;
+}
+
+.history-line {
+  margin: 0px;
+}
+
+.good-formula {
+  border: solid 4px green;
+  background-color: palegreen;
+}
+
+.bad-formula {
+  border: solid 4px red;
+  background-color: lightpink;
+}
+
+.blue-border {
+  border: dashed 3px blue;
+}
+
+.red-border {
+  border: dashed 3px red;
+}
+
+.orange-border {
+  border: dashed 3px orange;
+}
+
+.green-border {
+  border: dashed 3px green;
+}
+
+.pink-border {
+  border: dashed 3px pink;
+}
+
+.yellow-border {
+  border: dashed 3px yellow;
 }

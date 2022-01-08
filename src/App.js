@@ -4,10 +4,9 @@ import React, { Component } from 'react';
 // See https://medium.com/@shuseel/how-to-create-a-simple-calculator-using-html-and-javascript-50a83cb2b90e
 
 class MyButton extends React.Component {
-
   render() {
     return (
-      <button className='calc-button' onClick={this.props.onClick} key={this.props.index}>
+      <button className='calc-button' onClick={this.props.onClick} key={this.props.faceValue}>
         {this.props.faceValue}
       </button>
     )
@@ -36,11 +35,11 @@ class MyHistory extends React.Component {
     var historyWindow = [];
 
     this.props.history.forEach(function (line, index) {
-      historyWindow.push(<p style={{ backgroundColor: 'pink', margin: 0 }}>{line}</p>);
+      historyWindow.push(<p className='history-line' key={index}>{line}</p>);
     })
 
     return (
-      <div style={{ backgroundColor: 'green' }}>
+      <div>
         {historyWindow}
         <div ref={this.myRef} />
       </div>
@@ -50,8 +49,10 @@ class MyHistory extends React.Component {
 
 class MyDisplay extends React.Component {
   render() {
+    var formulaClass = (this.props.isValidFormula) ? 'good-formula' : 'bad-formula';
+
     return (
-      <input className='calc-display' readOnly style={{ border: (this.props.isValidFormula) ? 'solid 4px black' : 'solid 4px red' }} value={this.props.inputValue}></input>
+      <input className={['calc-display', formulaClass].join(' ')} readOnly value={this.props.inputValue}></input>
     )
   }
 }
@@ -59,11 +60,8 @@ class MyDisplay extends React.Component {
 const MyRow = (props) => {
   var row = [];
 
-  let rowOffset = props.rowId * props.buttons.length;
-
-  props.buttons.forEach(function (button, index) {
-    // console.log('index + rowOffset: ', index + rowOffset);
-    row.push(<MyButton textcolor={props.textcolor} onClick={() => props.onClick(button)} faceValue={button} key={index} index={index + rowOffset}></MyButton>);
+  props.buttons.forEach(function (button) {
+    row.push(<MyButton onClick={() => props.onClick(button)} faceValue={button} key={button}></MyButton>);
   })
 
   return (
@@ -77,7 +75,8 @@ class Calculator extends Component {
     this.state = {
       history: [],
       display: '',
-      isValidFormula: true
+      isValidFormula: true,
+      isResult: false
     }
   }
 
@@ -99,13 +98,14 @@ class Calculator extends Component {
       case '(':
       case ')':
         try {
-          eval(this.state.display + i);
+          eval((this.state.isResult ? '' : this.state.display) + i);
         } catch { //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
           isValidFormula = false;
         }
         this.setState(state => ({
-          display: state.display + i,
-          isValidFormula: isValidFormula
+          display: (state.isResult ? '' : state.display) + i,
+          isValidFormula: isValidFormula,
+          isResult: false
         }));
         break;
       case '+/-':
@@ -117,9 +117,15 @@ class Calculator extends Component {
         }
         break;
       case 'C':
+        if(this.state.display.length === 0) {
+          this.setState(state => ({
+            history: state.history.slice(0,0)
+          }));
+        }
         this.setState({
           display: '',
-          isValidFormula: true
+          isValidFormula: true,
+          isResult: false
         });
         break;
       case 'BS':
@@ -130,7 +136,8 @@ class Calculator extends Component {
         }
         this.setState(state => ({
           display: state.display.slice(0, -1),
-          isValidFormula: isValidFormula
+          isValidFormula: isValidFormula,
+          isResult: false
         }));
         break;
       case '/':
@@ -145,7 +152,8 @@ class Calculator extends Component {
         }
         this.setState(state => ({
           display: state.display + i,
-          isValidFormula: isValidFormula
+          isValidFormula: isValidFormula,
+          isResult: false
         }));
         break;
       case 'x²':
@@ -153,11 +161,11 @@ class Calculator extends Component {
           eval(this.state.display);
           this.setState(state => ({
             history: state.history.concat([state.display + '^2=' + eval(state.display) * eval(state.display)]),
-            display: eval(state.display) * eval(state.display),
-            isValidFormula: true
+            display: String(eval(state.display) * eval(state.display)),
+            isValidFormula: true,
+            isResult: true
           }));
         } catch {
-          alert('Error');
           this.setState({ isValidFormula: false });
         }
         break;
@@ -165,25 +173,24 @@ class Calculator extends Component {
         try {
           eval(this.state.display);
           this.setState(state => ({
-            display: Math.sqrt(eval(state.display)),
-            isValidFormula: true
+            display: String(Math.sqrt(eval(state.display))),
+            isValidFormula: true,
+            isResult: true
           }));
         } catch {
-          alert('Error');
           this.setState({ isValidFormula: false });
         }
         break;
       case '=':
         try {
-          console.log("Trying to evaluate: ", this.state.display);
           eval(this.state.display);
           this.setState(state => ({
             history: state.history.concat([state.display + i + eval(state.display)]),
-            display: eval(state.display),
-            isValidFormula: true
+            display: String(eval(state.display)),
+            isValidFormula: true,
+            isResult: true
           }));
         } catch {
-          alert('Error');
           this.setState({ isValidFormula: false });
         }
         break;
@@ -193,8 +200,8 @@ class Calculator extends Component {
     }
   }
 
-  createRowOfButtons(buttons, index) {
-    return <MyRow textcolor='red' onClick={(i) => this.buttonClicked(i)} buttons={buttons} rowId={index}></MyRow>;
+  createRowOfButtons(buttons) {
+    return <MyRow onClick={(i) => this.buttonClicked(i)} buttons={buttons} key={buttons.join('')}></MyRow>;
   }
 
   render() {
@@ -208,20 +215,23 @@ class Calculator extends Component {
       ['+/-', 0, '.', '=']
     ];
 
-    calcButtons.forEach((buttons, index) => {
-      buttonLayout.push(this.createRowOfButtons(buttons, index));
+    calcButtons.forEach((buttons) => {
+      buttonLayout.push(this.createRowOfButtons(buttons));
     });
 
     return (
-      <div className='calculator' style={{ border: 'dashed 4px yellow' }}>
-        <div className='calc-history' style={{ border: 'dashed 4px pink' }}>
+      <div className='calculator red-border'>
+        <div className='calc-history yellow-border'>
           <MyHistory history={this.state.history}></MyHistory>
         </div>
-        <div className='calc-display' style={{ border: 'dashed 4px orange' }}>
+        <div className='calc-display-container green-border'>
           <MyDisplay inputValue={this.state.display} isValidFormula={this.state.isValidFormula}></MyDisplay>
         </div>
-        <p>{this.state.isValidFormula ? 'VALID FORMULA' : 'INVALID FORMULA'} :- {this.state.display}</p>
-        <div className='calc-button-panel' style={{ border: 'dashed 4px purple' }}>{buttonLayout}</div>
+        <div className='calc-message blue-border'>
+          <div className='message-line'>{this.state.isValidFormula ? 'VALID FORMULA' : 'INVALID FORMULA'}</div>
+          <div className='message-line' style={{textAlign:'right'}}>{this.state.isResult ? 'RESULT' : ''}</div>
+        </div>
+        <div className='calc-button-panel pink-border'>{buttonLayout}</div>
       </div>
     )
   }
