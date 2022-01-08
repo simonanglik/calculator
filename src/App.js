@@ -1,73 +1,76 @@
 import './App.css';
 import React, { Component } from 'react';
+import CalcHistory from './CalcHistory.component';
+import CalcRow from './CalcButton.component';
+import CalcDisplay from './CalcDisplay.component';
 
 // See https://medium.com/@shuseel/how-to-create-a-simple-calculator-using-html-and-javascript-50a83cb2b90e
 
-class MyButton extends React.Component {
-  render() {
-    return (
-      <button className='calc-button' onClick={this.props.onClick} key={this.props.faceValue}>
-        {this.props.faceValue}
-      </button>
-    )
-  }
-}
+// class CalcButton extends React.Component {
+//   render() {
+//     return (
+//       <button className='calc-button' onClick={this.props.onClick} key={this.props.faceValue}>
+//         {this.props.faceValue}
+//       </button>
+//     )
+//   }
+// }
 
-class MyHistory extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
+// class CalcHistory extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.myRef = React.createRef();
+//   }
 
-  componentDidMount() {
-    this.scrollToBottom()
-  }
+//   componentDidMount() {
+//     this.scrollToBottom()
+//   }
 
-  componentDidUpdate() {
-    this.scrollToBottom()
-  }
+//   componentDidUpdate() {
+//     this.scrollToBottom()
+//   }
 
-  scrollToBottom = () => {
-    this.myRef.current.scrollIntoView({ behavior: 'smooth' })
-  }
+//   scrollToBottom = () => {
+//     this.myRef.current.scrollIntoView({ behavior: 'smooth' })
+//   }
 
-  render() {
-    var historyWindow = [];
+//   render() {
+//     var historyWindow = [];
 
-    this.props.history.forEach(function (line, index) {
-      historyWindow.push(<p className='history-line' key={index}>{line}</p>);
-    })
+//     this.props.history.forEach(function (line, index) {
+//       historyWindow.push(<p className='history-line' key={index}>{line}</p>);
+//     })
 
-    return (
-      <div>
-        {historyWindow}
-        <div ref={this.myRef} />
-      </div>
-    )
-  }
-}
+//     return (
+//       <div>
+//         {historyWindow}
+//         <div ref={this.myRef} />
+//       </div>
+//     )
+//   }
+// }
 
-class MyDisplay extends React.Component {
-  render() {
-    var formulaClass = (this.props.isValidFormula) ? 'good-formula' : 'bad-formula';
+// class CalcDisplay extends React.Component {
+//   render() {
+//     var formulaClass = (this.props.isValidFormula) ? 'good-formula' : 'bad-formula';
 
-    return (
-      <input className={['calc-display', formulaClass].join(' ')} readOnly value={this.props.inputValue}></input>
-    )
-  }
-}
+//     return (
+//       <input className={['calc-display', formulaClass].join(' ')} readOnly value={this.props.inputValue}></input>
+//     )
+//   }
+// }
 
-const MyRow = (props) => {
-  var row = [];
+// const CalcRow = (props) => {
+//   var row = [];
 
-  props.buttons.forEach(function (button) {
-    row.push(<MyButton onClick={() => props.onClick(button)} faceValue={button} key={button}></MyButton>);
-  })
+//   props.buttons.forEach(function (button) {
+//     row.push(<CalcButton onClick={() => props.onClick(button)} faceValue={button} key={button}></CalcButton>);
+//   })
 
-  return (
-    <div className='calc-panel-row'>{row}</div>
-  )
-}
+//   return (
+//     <div className='calc-panel-row'>{row}</div>
+//   )
+// }
 
 class Calculator extends Component {
   constructor(props) {
@@ -201,7 +204,7 @@ class Calculator extends Component {
   }
 
   createRowOfButtons(buttons) {
-    return <MyRow onClick={(i) => this.buttonClicked(i)} buttons={buttons} key={buttons.join('')}></MyRow>;
+    return <CalcRow onClick={(i) => this.buttonClicked(i)} buttons={buttons} key={buttons.join('')}></CalcRow>;
   }
 
   render() {
@@ -222,10 +225,10 @@ class Calculator extends Component {
     return (
       <div className='calculator red-border'>
         <div className='calc-history yellow-border'>
-          <MyHistory history={this.state.history}></MyHistory>
+          <CalcHistory history={this.state.history}></CalcHistory>
         </div>
         <div className='calc-display-container green-border'>
-          <MyDisplay inputValue={this.state.display} isValidFormula={this.state.isValidFormula}></MyDisplay>
+          <CalcDisplay inputValue={this.state.display} isValidFormula={this.state.isValidFormula}></CalcDisplay>
         </div>
         <div className='calc-message blue-border'>
           <div className='message-line'>{this.state.isValidFormula ? 'VALID FORMULA' : 'INVALID FORMULA'}</div>

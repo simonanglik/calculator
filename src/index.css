@@ -84,12 +84,14 @@ code {
 }
 
 .good-formula {
-  border: solid 4px green;
+  border: solid 2px green;
+  color: green;
   background-color: palegreen;
 }
 
 .bad-formula {
-  border: solid 4px red;
+  border: solid 2px red;
+  color: red;
   background-color: lightpink;
 }
 
