@@ -15,15 +15,35 @@ class MyButton extends React.Component {
 }
 
 class MyHistory extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.scrollToBottom()
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom()
+  }
+
+  scrollToBottom = () => {
+    this.myRef.current.scrollIntoView({ behavior: 'smooth' })
+  }
+
   render() {
     var historyWindow = [];
 
     this.props.history.forEach(function (line, index) {
-      historyWindow.push(<li style={{backgroundColor: 'pink'}}>{line}</li>);
+      historyWindow.push(<p style={{ backgroundColor: 'pink', margin: 0 }}>{line}</p>);
     })
 
     return (
-      <ul style={{backgroundColor: 'green'}}>{historyWindow}</ul>
+      <div style={{ backgroundColor: 'green' }}>
+        {historyWindow}
+        <div ref={this.myRef} />
+      </div>
     )
   }
 }

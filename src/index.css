@@ -46,7 +46,7 @@ code {
   font-size: 18px;
   font-weight: bold;
   text-align: right;
-  overflow-y:auto;
+  overflow-y:scroll;
 }
 
 .calc-message {
