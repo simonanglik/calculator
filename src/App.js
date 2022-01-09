@@ -23,14 +23,12 @@ class Calculator extends Component {
 
     console.log(oldState, newState);
 
-    // if (newState !== undefined) {
     this.setState((state) => ({
       history: newState.history ?? state.history,
       display: newState.display ?? state.display,
       isValidFormula: newState.isValidFormula ?? state.isValidFormula,
       isResult: newState.isResult ?? state.isResult,
     }));
-    // }
   }
 
   createRowOfButtons(buttons) {
