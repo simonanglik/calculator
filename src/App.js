@@ -16,12 +16,8 @@ class Calculator extends Component {
     };
   }
 
-  buttonClicked(i) {
-    console.log("Button clicked now: " + i, " display: ", this.state.display);
-    var oldState = this.state;
-    var newState = do_calculate(this.state, i);
-
-    console.log(oldState, newState);
+  buttonClicked(buttonPressed) {
+    var newState = do_calculate(this.state, buttonPressed);
 
     this.setState((state) => ({
       history: newState.history ?? state.history,
@@ -57,45 +53,41 @@ class Calculator extends Component {
     });
 
     return (
-      <div className="calculator red-border">
+      <div className="calculator">
         <div className="calc-message">
-          <div className="message-line"> Calculator </div>{" "}
+          <div className="message-line"> Calculator </div>
           <div className="message-line" style={{ textAlign: "right" }}>
-            {" "}
             <button
               onClick={() => {
                 alert("Help Wanted");
               }}
             >
-              {" "}
-              ?{" "}
+              ?
             </button>
           </div>
-        </div>{" "}
-        <div className="calc-history yellow-border">
-          <CalcHistory history={this.state.history}> </CalcHistory>{" "}
-        </div>{" "}
-        <div className="calc-display-container green-border">
+        </div>
+        <div className="calc-history">
+          <CalcHistory history={this.state.history}> </CalcHistory>
+        </div>
+        <div className="calc-display-container">
           <CalcDisplay
             inputValue={this.state.display}
             isValidFormula={this.state.isValidFormula}
-          ></CalcDisplay>{" "}
-        </div>{" "}
-        <div className="calc-message blue-border">
+          ></CalcDisplay>
+        </div>
+        <div className="calc-message">
           <div className="message-line">
-            {" "}
             {this.state.display.length > 0
               ? this.state.isValidFormula
                 ? "VALID FORMULA"
                 : "INVALID FORMULA"
-              : ""}{" "}
-          </div>{" "}
+              : ""}
+          </div>
           <div className="message-line" style={{ textAlign: "right" }}>
-            {" "}
-            {this.state.isResult ? "RESULT" : ""}{" "}
-          </div>{" "}
-        </div>{" "}
-        <div className="calc-button-panel pink-border"> {buttonLayout} </div>{" "}
+            {this.state.isResult ? "RESULT" : ""}
+          </div>
+        </div>
+        <div className="calc-button-panel"> {buttonLayout} </div>
       </div>
     );
   }

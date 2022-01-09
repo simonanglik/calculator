@@ -35,7 +35,7 @@ code {
   flex-direction: row;
   flex-grow: 1;
   height: 40px;
-  border: solid 4px green;
+  border: solid 0px black;
 }
 
 .calc-display {
@@ -50,7 +50,7 @@ code {
 .calc-history {
   flex-grow: 1;
   height: 200px;
-  border: solid 4px green;
+  border: solid 2px black;
   font-size: 18px;
   font-weight: bold;
   text-align: right;
@@ -61,6 +61,7 @@ code {
 .calc-message {
   display: inline-flex;
   flex-direction: row;
+  border: solid 2px black;
 }
 
 .message-line {
@@ -77,6 +78,7 @@ code {
   flex-direction: column;
   width: 30%;
   margin: auto;
+  border: solid 2px black;
 }
 
 .history-line {

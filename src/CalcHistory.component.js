@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class CalcHistory extends Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef();
+    this.scrollToRef = React.createRef();
   }
 
   componentDidMount() {
@@ -15,7 +15,7 @@ class CalcHistory extends Component {
   }
 
   scrollToBottom = () => {
-    this.myRef.current.scrollIntoView({ behavior: "smooth" });
+    this.scrollToRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   render() {
@@ -30,8 +30,8 @@ class CalcHistory extends Component {
     });
 
     return (
-      <div className="red-border">
-        {historyWindow} <div ref={this.myRef} />
+      <div>
+        {historyWindow} <div ref={this.scrollToRef} />
       </div>
     );
   }
