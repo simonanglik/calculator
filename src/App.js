@@ -1,221 +1,181 @@
-import './App.css';
-import React, { Component } from 'react';
-import CalcHistory from './CalcHistory.component';
-import CalcRow from './CalcButton.component';
-import CalcDisplay from './CalcDisplay.component';
-
-// See https://medium.com/@shuseel/how-to-create-a-simple-calculator-using-html-and-javascript-50a83cb2b90e
-
-// class CalcButton extends React.Component {
-//   render() {
-//     return (
-//       <button className='calc-button' onClick={this.props.onClick} key={this.props.faceValue}>
-//         {this.props.faceValue}
-//       </button>
-//     )
-//   }
-// }
-
-// class CalcHistory extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.myRef = React.createRef();
-//   }
-
-//   componentDidMount() {
-//     this.scrollToBottom()
-//   }
-
-//   componentDidUpdate() {
-//     this.scrollToBottom()
-//   }
-
-//   scrollToBottom = () => {
-//     this.myRef.current.scrollIntoView({ behavior: 'smooth' })
-//   }
-
-//   render() {
-//     var historyWindow = [];
-
-//     this.props.history.forEach(function (line, index) {
-//       historyWindow.push(<p className='history-line' key={index}>{line}</p>);
-//     })
-
-//     return (
-//       <div>
-//         {historyWindow}
-//         <div ref={this.myRef} />
-//       </div>
-//     )
-//   }
-// }
-
-// class CalcDisplay extends React.Component {
-//   render() {
-//     var formulaClass = (this.props.isValidFormula) ? 'good-formula' : 'bad-formula';
-
-//     return (
-//       <input className={['calc-display', formulaClass].join(' ')} readOnly value={this.props.inputValue}></input>
-//     )
-//   }
-// }
-
-// const CalcRow = (props) => {
-//   var row = [];
-
-//   props.buttons.forEach(function (button) {
-//     row.push(<CalcButton onClick={() => props.onClick(button)} faceValue={button} key={button}></CalcButton>);
-//   })
-
-//   return (
-//     <div className='calc-panel-row'>{row}</div>
-//   )
-// }
+import "./App.css";
+import React, { Component } from "react";
+import CalcHistory from "./CalcHistory.component";
+import CalcRow from "./CalcButton.component";
+import CalcDisplay from "./CalcDisplay.component";
+import { do_calculate } from "./calculatorEngine";
 
 class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
       history: [],
-      display: '',
+      display: "",
       isValidFormula: true,
-      isResult: false
-    }
+      isResult: false,
+    };
   }
 
   buttonClicked(i) {
-    console.log('Button clicked: ' + i, ' display: ', this.state.display);
-    let isValidFormula = true;
-    switch (i) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-      case '.':
-      case '(':
-      case ')':
-        try {
-          eval((this.state.isResult ? '' : this.state.display) + i);
-        } catch { //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
-          isValidFormula = false;
-        }
-        this.setState(state => ({
-          display: (state.isResult ? '' : state.display) + i,
-          isValidFormula: isValidFormula,
-          isResult: false
-        }));
-        break;
-      case '+/-':
-        if (this.state.display === eval(this.state.display)) {
-          this.setState(state => ({
-            display: -state.display,
-            isValidFormula: true
-          }));
-        }
-        break;
-      case 'C':
-        if(this.state.display.length === 0) {
-          this.setState(state => ({
-            history: state.history.slice(0,0)
-          }));
-        }
-        this.setState({
-          display: '',
-          isValidFormula: true,
-          isResult: false
-        });
-        break;
-      case 'BS':
-        try {
-          eval(this.state.display.slice(0, -1));
-        } catch { //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
-          isValidFormula = false;
-        }
-        this.setState(state => ({
-          display: state.display.slice(0, -1),
-          isValidFormula: isValidFormula,
-          isResult: false
-        }));
-        break;
-      case '/':
-      case '%':
-      case '*':
-      case '-':
-      case '+':
-        try {
-          eval(this.state.display + i);
-        } catch { //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
-          isValidFormula = false;
-        }
-        this.setState(state => ({
-          display: state.display + i,
-          isValidFormula: isValidFormula,
-          isResult: false
-        }));
-        break;
-      case 'x²':
-        try {
-          eval(this.state.display);
-          this.setState(state => ({
-            history: state.history.concat([state.display + '^2=' + eval(state.display) * eval(state.display)]),
-            display: String(eval(state.display) * eval(state.display)),
-            isValidFormula: true,
-            isResult: true
-          }));
-        } catch {
-          this.setState({ isValidFormula: false });
-        }
-        break;
-      case '√':
-        try {
-          eval(this.state.display);
-          this.setState(state => ({
-            display: String(Math.sqrt(eval(state.display))),
-            isValidFormula: true,
-            isResult: true
-          }));
-        } catch {
-          this.setState({ isValidFormula: false });
-        }
-        break;
-      case '=':
-        try {
-          eval(this.state.display);
-          this.setState(state => ({
-            history: state.history.concat([state.display + i + eval(state.display)]),
-            display: String(eval(state.display)),
-            isValidFormula: true,
-            isResult: true
-          }));
-        } catch {
-          this.setState({ isValidFormula: false });
-        }
-        break;
-      default:
-        alert('default error');
-        break;
-    }
+    console.log("Button clicked now: " + i, " display: ", this.state.display);
+    var oldState = this.state;
+    var newState = do_calculate(this.state, i);
+
+    console.log(oldState, newState);
+
+    // if (newState !== undefined) {
+    this.setState((state) => ({
+      history: newState.history ?? state.history,
+      display: newState.display ?? state.display,
+      isValidFormula: newState.isValidFormula ?? state.isValidFormula,
+      isResult: newState.isResult ?? state.isResult,
+    }));
+    // }
   }
 
+  // calculate(currentState, i /* buttonPressed */) {
+  //   let newState = {};
+  //   let isValidFormula = true;
+
+  //   switch (i) {
+  //     case 0:
+  //     case 1:
+  //     case 2:
+  //     case 3:
+  //     case 4:
+  //     case 5:
+  //     case 6:
+  //     case 7:
+  //     case 8:
+  //     case 9:
+  //     case ".":
+  //     case "(":
+  //     case ")":
+  //       try {
+  //         eval((currentState.isResult ? "" : currentState.display) + i);
+  //       } catch {
+  //         //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
+  //         newState.isValidFormula = false;
+  //       }
+  //       newState.display =
+  //         (currentState.isResult ? "" : currentState.display) + i;
+  //       newState.isValidFormula = isValidFormula;
+  //       newState.isResult = false;
+  //       break;
+  //     case "+/-":
+  //       if (currentState.display === eval(currentState.display)) {
+  //         this.setState((state) => ({
+  //           display: -state.display,
+  //           isValidFormula: true,
+  //         }));
+  //       }
+  //       break;
+  //     case "C":
+  //       if (currentState.display.length === 0) {
+  //         newState.history = currentState.history.slice(0, 0);
+  //       }
+  //       newState.display = "CLEAR";
+  //       newState.isValidFormula = true;
+  //       newState.isResult = false;
+  //       break;
+  //     case "BS":
+  //       try {
+  //         eval(currentState.display.slice(0, -1));
+  //       } catch {
+  //         //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
+  //         newState.isValidFormula = false;
+  //       }
+  //       newState.display = currentState.display.slice(0, -1);
+  //       newState.isValidFormula = isValidFormula;
+  //       newState.isResult = false;
+  //       break;
+  //     case "/":
+  //     case "%":
+  //     case "*":
+  //     case "-":
+  //     case "+":
+  //       try {
+  //         eval(currentState.display + i);
+  //       } catch {
+  //         //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
+  //         newState.isValidFormula = false;
+  //       }
+  //       newState.display = currentState.display + i;
+  //       newState.isValidFormula = isValidFormula;
+  //       newState.isResult = false;
+  //       break;
+  //     case "x²":
+  //       try {
+  //         eval(currentState.display);
+  //         newState.history = currentState.history.concat([
+  //           currentState.display +
+  //             "^2=" +
+  //             eval(currentState.display) * eval(currentState.display),
+  //         ]);
+  //         newState.display = String(
+  //           eval(currentState.display) * eval(currentState.display)
+  //         );
+  //         newState.isValidFormula = true;
+  //         newState.isResult = true;
+  //       } catch {
+  //         newState.isValidFormula = false;
+  //       }
+  //       break;
+  //     case "√":
+  //       try {
+  //         eval(currentState.display);
+  //         newState.history = currentState.history.concat([
+  //           "√" +
+  //             currentState.display + "=" +
+  //             Math.sqrt(eval(currentState.display)),
+  //         ]);
+  //         newState.display = String(Math.sqrt(eval(currentState.display)));
+  //         newState.isValidFormula = true;
+  //         newState.isResult = true;
+  //       } catch {
+  //         newState.isValidFormula = false;
+  //       }
+  //       break;
+  //     case "=":
+  //       try {
+  //         eval(currentState.display);
+  //         newState.history = currentState.history.concat([
+  //           currentState.display + i + eval(currentState.display),
+  //         ]);
+  //         newState.display = String(eval(currentState.display));
+  //         newState.isValidFormula = true;
+  //         newState.isResult = true;
+  //       } catch {
+  //         newState.isValidFormula = false;
+  //       }
+  //       break;
+  //     default:
+  //       alert("default error");
+  //       break;
+  //   }
+
+  //   return newState;
+  // }
+
   createRowOfButtons(buttons) {
-    return <CalcRow onClick={(i) => this.buttonClicked(i)} buttons={buttons} key={buttons.join('')}></CalcRow>;
+    return (
+      <CalcRow
+        onClick={(i) => this.buttonClicked(i)}
+        buttons={buttons}
+        key={buttons.join("")}
+      ></CalcRow>
+    );
   }
 
   render() {
     var buttonLayout = [];
     var calcButtons = [
-      ['(', ')', 'x²', 'C'],
-      ['%', '/', '√', 'BS'],
-      [7, 8, 9, '*'],
-      [4, 5, 6, '-'],
-      [1, 2, 3, '+'],
-      ['+/-', 0, '.', '=']
+      ["(", ")", "x²", "C"],
+      ["%", "/", "√", "BS"],
+      [7, 8, 9, "*"],
+      [4, 5, 6, "-"],
+      [1, 2, 3, "+"],
+      ["+/-", 0, ".", "="],
     ];
 
     calcButtons.forEach((buttons) => {
@@ -223,29 +183,40 @@ class Calculator extends Component {
     });
 
     return (
-      <div className='calculator red-border'>
-        <div className='calc-history yellow-border'>
-          <CalcHistory history={this.state.history}></CalcHistory>
+      <div className="calculator red-border">
+        <div className="calc-message">
+          <div className="message-line">Calculator</div>
+          <div className="message-line" style={{ textAlign: "right" }}><button onClick={()=>{alert("Help Wanted")}}>?</button></div>
         </div>
-        <div className='calc-display-container green-border'>
-          <CalcDisplay inputValue={this.state.display} isValidFormula={this.state.isValidFormula}></CalcDisplay>
+        <div className="calc-history yellow-border">
+          <CalcHistory history={this.state.history}> </CalcHistory>
         </div>
-        <div className='calc-message blue-border'>
-          <div className='message-line'>{this.state.isValidFormula ? 'VALID FORMULA' : 'INVALID FORMULA'}</div>
-          <div className='message-line' style={{textAlign:'right'}}>{this.state.isResult ? 'RESULT' : ''}</div>
+        <div className="calc-display-container green-border">
+          <CalcDisplay
+            inputValue={this.state.display}
+            isValidFormula={this.state.isValidFormula}
+          ></CalcDisplay>
         </div>
-        <div className='calc-button-panel pink-border'>{buttonLayout}</div>
+        <div className="calc-message blue-border">
+          <div className="message-line">
+            {this.state.display.length > 0
+              ? this.state.isValidFormula
+                ? "VALID FORMULA"
+                : "INVALID FORMULA"
+              : ""}
+          </div>
+          <div className="message-line" style={{ textAlign: "right" }}>
+            {this.state.isResult ? "RESULT" : ""}
+          </div>
+        </div>
+        <div className="calc-button-panel pink-border"> {buttonLayout} </div>
       </div>
-    )
+    );
   }
 }
 
-
 function App() {
-  return (
-    <Calculator>
-    </Calculator>
-  );
+  return <Calculator></Calculator>;
 }
 
 export default App;
