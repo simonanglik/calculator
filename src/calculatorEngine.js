@@ -20,21 +20,19 @@ export function do_calculate(currentState, keyPressed) {
         case ")":
             try {
                 eval((currentState.isResult ? "" : currentState.display) + keyPressed);
+                newState.isValidFormula = true;
             } catch {
-                //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
+                //TODO  (e instanceof SyntaxError) do we want to test for SyntaxErrors?
                 newState.isValidFormula = false;
             }
             newState.display =
                 (currentState.isResult ? "" : currentState.display) + keyPressed;
-            newState.isValidFormula = isValidFormula;
             newState.isResult = false;
             break;
         case "+/-":
-            if (currentState.display === eval(currentState.display)) {
-                this.setState((state) => ({
-                    display: -state.display,
-                    isValidFormula: true,
-                }));
+            if (currentState.display == eval(currentState.display)) {
+                newState.display = -currentState.display;
+                newState.isValidFormula = true;
             }
             break;
         case "C":
@@ -48,12 +46,11 @@ export function do_calculate(currentState, keyPressed) {
         case "BS":
             try {
                 eval(currentState.display.slice(0, -1));
+                newState.isValidFormula = true;
             } catch {
-                //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
                 newState.isValidFormula = false;
             }
             newState.display = currentState.display.slice(0, -1);
-            newState.isValidFormula = isValidFormula;
             newState.isResult = false;
             break;
         case "/":
@@ -63,12 +60,11 @@ export function do_calculate(currentState, keyPressed) {
         case "+":
             try {
                 eval(currentState.display + keyPressed);
+                newState.isValidFormula = true;
             } catch {
-                //  (e instanceof SyntaxError) do we want to test for SyntaxErrors ?
                 newState.isValidFormula = false;
             }
             newState.display = currentState.display + keyPressed;
-            newState.isValidFormula = isValidFormula;
             newState.isResult = false;
             break;
         case "x²":

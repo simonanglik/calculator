@@ -1,36 +1,39 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-class CalcHistory extends React.Component {
+class CalcHistory extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
   }
 
   componentDidMount() {
-    this.scrollToBottom()
+    this.scrollToBottom();
   }
 
   componentDidUpdate() {
-    this.scrollToBottom()
+    this.scrollToBottom();
   }
 
   scrollToBottom = () => {
-    this.myRef.current.scrollIntoView({ behavior: 'smooth' })
-  }
+    this.myRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   render() {
     var historyWindow = [];
 
     this.props.history.forEach(function (line, index) {
-      historyWindow.push(<p className='history-line' key={index}>{line}</p>);
-    })
+      historyWindow.push(
+        <p className="history-line" key={index}>
+          {line}
+        </p>
+      );
+    });
 
     return (
-      <div className='red-border'>
-        {historyWindow}
-        <div ref={this.myRef} />
+      <div className="red-border">
+        {historyWindow} <div ref={this.myRef} />
       </div>
-    )
+    );
   }
 }
 

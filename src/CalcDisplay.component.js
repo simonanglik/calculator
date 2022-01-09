@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class CalcDisplay extends React.Component {
+class CalcDisplay extends Component {
   render() {
     var formulaClass = this.props.isValidFormula
       ? "good-formula"

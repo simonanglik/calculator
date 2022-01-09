@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class CalcButton extends React.Component {
+class CalcButton extends Component {
   render() {
     return (
       <button
