@@ -76,7 +76,8 @@ code {
 .calculator {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 80%;
+  max-width: 400px;
   margin: auto;
   border: solid 2px black;
 }
