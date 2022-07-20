@@ -45,10 +45,10 @@ code {
 }
 
 h1 {
-  color: red;
-  background-color: yellow;
+  color: black;
+  background-color: aquamarine;
   border-radius: 20px;
-  border: solid 4px purple;
+  border: solid 4px black;
   text-align: center;
 }
 
