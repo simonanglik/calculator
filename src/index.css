@@ -1,15 +1,55 @@
+:root {
+  --main-bg-color: #c0ffff;
+  --main-width: 150px;
+}
+
+@media screen and (min-width: 300px) {
+  :root {
+    --main-bg-color: #c0ffff;
+    --main-width: 150px;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  :root {
+    --main-bg-color: #c0ffff;
+    --main-width: 200px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  :root {
+    --main-bg-color: #c0c0ff;
+    --main-width: 400px;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  :root {
+    --main-bg-color: #ffc0c0;
+    --main-width: 600px;
+  }
+}
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  background: var(--main-bg-color, #e0e0e0);
+  margin: 20px;
+  /* width: var(--main-width, 500px); */
+  overflow: scroll;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1 {
+  color: red;
+  background-color: yellow;
+  border-radius: 20px;
+  border: solid 4px purple;
+  text-align: center;
 }
 
 .calc-panel {
