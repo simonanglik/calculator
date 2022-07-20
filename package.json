@@ -15,7 +15,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "deploy": "npm run build && git add . && git commit -m \"Create new build\" && git push origin master",
+        "deploy": "npm run build && git add . && git commit -m \"Create new build\" && git push origin main",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
